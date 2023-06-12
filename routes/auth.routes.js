@@ -1,43 +1,38 @@
-const bcrypt = require('bcryptjs');
-const express = require('express');
+const bcrypt = require("bcryptjs");
+const express = require("express");
 const router = express.Router();
 const saltRounds = 10;
 
-const User = require('../models/User.model');
+const User = require("../models/User.model");
 router.get("/signup", (req, res, next) => {
-    res.render('auth/signup')
+  res.render("auth/signup");
 });
 
 router.post("/signup", (req, res, next) => {
-    console.log('req.body', req.body)
-    const { username, password } = req.body;
+  console.log("req.body", req.body);
+  const { username, password } = req.body;
 
-
-bcrypt
+  bcrypt
     .genSalt(saltRounds)
-    .then(salt => bcrypt.hash(password, salt))
-    .then(hashedPassword => {
+    .then((salt) => bcrypt.hash(password, salt))
+    .then((hashedPassword) => {
+        console.log(hashedPassword)
       return User.create({
-    
         username,
-        passwordHash: hashedPassword
+        password: hashedPassword,
       });
     })
-    .then(userFromDB => {
-      console.log('Newly created user is: ', userFromDB);
-      res.redirect(`/auth/profile/${userFromDB.username}`)
-    })
-
-
-
-router.get("/profile/:username", (req, res, next) => {
-    User.findOne({ username: req.params.username })
-        .then(foundUser => {
-            console.log('foundUser', foundUser)
-            res.render('auth/profile', foundUser)
-        })
-        .catch(err => console.log(err))
-
+    .then((userFromDB) => {
+      console.log("Newly created user is: ", userFromDB);
+      res.redirect(`/auth/profile/${userFromDB.username}`);
+    });
 });
-})
+router.get("/profile/:username", (req, res, next) => {
+  User.findOne({ username: req.params.username })
+    .then((foundUser) => {
+      console.log("foundUser", foundUser);
+      res.render("auth/profile", foundUser);
+    })
+    .catch((err) => console.log(err));
+});
 module.exports = router;
