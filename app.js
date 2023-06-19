@@ -23,14 +23,19 @@ const projectName = 'lab-express-basic-auth';
 const capitalized = string => string[0].toUpperCase() + string.slice(1).toLowerCase();
 
 app.locals.title = `${capitalized(projectName)}- Generated with Ironlauncher`;
+require("./config")(app);
+require("./config/session.config")(app)
 
 // 👇 Start handling routes here
-const index = require('./routes/index');
+const index = require('./routes/index.routes');
+const authRoutes=require("./routes/auth.routes")
 app.use('/', index);
-const authRoutes=require("./routes/auth.routes.js")
 app.use('/auth',authRoutes)
+
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require('./error-handling')(app);
+
 
 module.exports = app;
 

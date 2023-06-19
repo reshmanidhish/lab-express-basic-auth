@@ -8,11 +8,18 @@ const userSchema = new Schema({
     required: [true, 'Username is required.'],
     unique: true
   },
-  password: {
+  passwordHash: {
     type: String,
     trim: true,
     required: [true, 'Password is required.']
-  }
+  },
+  email: {
+    type: String,
+    required: [true, 'Email is required.'],
+    unique: true,
+    lowercase: true,
+    trim: true
+  },
 },
 {
   timestamps: true
